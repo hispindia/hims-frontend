@@ -18,6 +18,8 @@ export default function FamilyHistory(props) {
     var [showFatherDead, setShowFatherDead] = useState();
     var [deadMotherDetails, setDeadMotherDetails] = useState([]);
     var [deadFatherDetails, setDeadFatherDetails] = useState([]);
+    var uuidList = [];
+    var [allfamilyuuid, setAllfamilyuuid] = useState([]);
 
 
     family_level_1.forEach(function (item, index) {
@@ -41,16 +43,27 @@ export default function FamilyHistory(props) {
       "name": uuid,
       "value":btnid
     }
+    deadMotherDetails.forEach(function (itemva, index) {
+    uuidList.push(itemva.uuid)
+    setAllfamilyuuid(uuidList);
+    });
+
+    deadFatherDetails.forEach(function (itemva, index) {
+    uuidList.push(itemva.uuid)
+    setAllfamilyuuid(uuidList);
+    });
 
       if (btnvalue.indexOf(MOTHER_ALIVE) > -1) {
         setShowMotherDead(true);
       }
       else if (btnvalue.indexOf(FATHER_ALIVE) > -1) {
         setShowFatherDead(true);
+
       }
       else {
       setShowMotherDead(false);
       setShowFatherDead(false);
+      props.onDelete(event,allfamilyuuid)
 
     }
     setSuccesscheck(false);

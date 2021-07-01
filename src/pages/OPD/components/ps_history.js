@@ -18,6 +18,8 @@ export default function PS_History(props) {
   var [successcheck, setSuccesscheck] = useState(false);
   var [smokingCap, setSmokingCap] = useState([]);
   var [alcoholCap, setAlcoholCap] = useState([]);
+  var uuidList = [];
+  var [allpsuuid, setAllpsuuid] = useState([]);
 
   ps_level_1.forEach(function (item, index) {
     var title = item.display;
@@ -49,10 +51,18 @@ export default function PS_History(props) {
     if (!NON_SMOKE.includes(btnvalue) && btnvalue != NON_ALCOHOLIC) {
       if (btnvalue.indexOf("Smoker") > -1) {
         setShowSmoke(true);
+          smokingCap.forEach(function (itemva, index) {
+            uuidList.push(itemva.uuid)
+            setAllpsuuid(uuidList);
+          });
       }
       else if (btnvalue != NON_ALCOHOLIC) {
       if (btnvalue.indexOf("Alcoholic") > -1) {
         setShowAlcoholic(true);
+        alcoholCap.forEach(function (itemva, index) {
+          uuidList.push(itemva.uuid)
+          setAllpsuuid(uuidList);
+        });
       }
       else {
       setShowSmoke(false);
@@ -61,13 +71,18 @@ export default function PS_History(props) {
     }
     }
     }
-
+    else if (NON_SMOKE.includes(btnvalue)) {
+      setShowSmoke(false);
+      props.onDelete(event,allpsuuid)
+    }
+    else if (btnvalue == NON_ALCOHOLIC) {
+      setShowAlcoholic(false)
+      props.onDelete(event,allpsuuid)
+    }
     else {
       setShowSmoke(false);
       setShowAlcoholic(false)
-
     }
-    setSuccesscheck(false);
     props.onChange(event,cVal)
   };
 

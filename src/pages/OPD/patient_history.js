@@ -43,6 +43,7 @@ const ControlledAccordions = (props) => {
   var FAMILY_HISTORY = "Family History"
   var ALLERGY_HISTORY = "Allergies History"
   var patientData = props.rowdata;
+  var savedValues = props.savedValues;
 
   const onChange = (event, key) => {
     setImmunization({
@@ -51,9 +52,12 @@ const ControlledAccordions = (props) => {
     })
   };
 
-  const handleChange = (event,cVal) => {
-    console.log(" Handle Changes Immunzetions ", cVal);
+  const handleChange = (event, cVal) => {
     props.onChange(event,cVal)
+  };
+
+  const deleteChange = (event,cVal) => {
+    props.onDelete(event,cVal)
   };
 
   const itemImmuneList = (items) => {
@@ -80,7 +84,8 @@ const ControlledAccordions = (props) => {
     return items.answers.map((item1, index) => (
       <PS_History
         answer={item1}
-        onChange = {handleChange}
+        onChange={handleChange}
+        onDelete={deleteChange}
       />
     ))
   };
@@ -89,7 +94,8 @@ const ControlledAccordions = (props) => {
     return items.answers.map((item1, index) => (
       <FamilyHistory
         answer={item1}
-        onChange = {handleChange}
+        onChange={handleChange}
+        onDelete={deleteChange}
       />
     ))
   };
@@ -98,7 +104,9 @@ const ControlledAccordions = (props) => {
     return items.answers.map((item1, index) => (
       <AllergyHistory
         answer={item1}
-        onChange = {handleChange}
+        onChange={handleChange}
+        onDelete={deleteChange}
+        savedValues = {savedValues}
       />
     ))
   };

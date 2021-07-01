@@ -5,34 +5,43 @@ import CodedType from './codedType'
 import TextType from './textType'
 
 export default function DrugHistory(props) {
-    var data = props.answer;
-  var dataType = props.answer.datatype.display
+  var data = props.answer;
+  var uuidDrug = props.uuidDrug;
+  var uuidNonDrug = props.uuidNonDrug;
 
-    var [successcheck, setSuccesscheck] = useState(false);
-  const handleChange = (event,cVal) => {
-      setSuccesscheck(true)
+  var parentUuid = ""
+  if (uuidDrug) {
+    parentUuid = uuidDrug;
+  }
+  else if (uuidNonDrug) {
+    parentUuid = uuidNonDrug;
+  }
+  var dataType = data.datatype.display
+
+  const handleChange = (event, cVal) => {
       props.onChange(event,cVal)
     };
 
     if (dataType == "Coded") {
-      return (
-      <div>
-      <CodedType
-      codeddata={data}
-      onChange = {handleChange}
-      />
-      </div>
-      );
-    }
-    else if (data.datatype.display == "Text" || data.datatype.display == "N/A") {
     return (
-        <div>
+      <div>
+        <CodedType
+          codeddata={data}
+          parentUuid = {parentUuid}
+          onChange = {handleChange}
+        />
+      </div>
+      )
+    }
+    else if (dataType == "Text" || dataType == "N/A") {
+    return (
+      <div>
         <TextType
         textdata={data}
-        onChange = {handleChange}
+          onChange={handleChange}
+          parentUuid = {parentUuid}
         />
-
-        </div>
-        )
+      </div>
+    )
     }
 }

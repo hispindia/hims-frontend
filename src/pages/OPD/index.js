@@ -44,6 +44,7 @@ import {
   DIASTOLIC,
 } from "../../utils/constants";
 import './index.css';
+import cardIconStyle from './../../components/Card/CardIcon/styles';
 
 
 const useStyles = makeStyles(opdStyles);
@@ -391,7 +392,6 @@ export default function Triage() {
 
   const getHistoryObs = () => {
     let obs = [];
-    console.log(" History Values : ",historyValues)
     for (const key in historyValues) {
       if (Object.hasOwnProperty.call(historyValues, key)) {
         const value = historyValues[key];
@@ -401,14 +401,23 @@ export default function Triage() {
         });
       }
     }
-    console.log(" History Observations : ", obs);
     return obs;
   };
 
-  const handleHistoryChange = (event,hisConcept) => {
+  const handleHistoryChange = (event, hisConcept) => {
     const { name, value } = hisConcept;
-    console.log(" History changes : ",hisConcept)
     setHistoryValues({ ...historyValues, [name]: value });
+  };
+
+  const deleteHistoryChange = (event,hisConcept) => {
+    for (const key in historyValues) {
+      if (Object.hasOwnProperty.call(historyValues, key)) {
+        if (hisConcept.includes(key)) {
+          delete historyValues[key]
+          setHistoryValues(historyValues)
+        }
+      }
+    }
   };
 
 
@@ -688,7 +697,9 @@ export default function Triage() {
               <GridContainer>
                 <ControlledAccordions
                   historyfields={historyfields}
-                  onChange={handleHistoryChange}
+                    onChange={handleHistoryChange}
+                    onDelete={deleteHistoryChange}
+                    savedValues = {historyValues}
                   key="Accordians"
                 />
               </GridContainer>

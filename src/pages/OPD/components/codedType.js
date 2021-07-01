@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CodedType(props) {
     const classes = useStyles();
     var data = props.codeddata;
-  var uuid = data.uuid;
+    var uuid = data.uuid;
 
     const handleChange = (event) => {
       var btnid = event.target.id
