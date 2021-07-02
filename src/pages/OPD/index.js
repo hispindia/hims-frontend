@@ -165,7 +165,8 @@ export default function Triage() {
   const [isFemale, setIsFemale] = useState(false);
   const [patient, setPatient] = useState({});
   const [vitalValues, setVitalValues] = useState(initialState);
-  const [historyValues, setHistoryValues] = useState({});
+  var [historyValues, setHistoryValues] = useState({});
+  var [dateHisValues, setDateHisValues] = useState({});
   const [previousVitals, setPreviousVitals] = useState([]);
   const [previousVitalsLoading, setPreviousVitalsLoading] = useState(false);
   const [providerUuid, setProviderUuid] = useState(null);
@@ -380,7 +381,6 @@ export default function Triage() {
       .then((response) => {
         enqueueSnackbar("Patient History saved successfully.");
         setOpen(false);
-        setVitalSaved(true);
       })
       .catch((error) => {
         console.log(error);
@@ -395,10 +395,15 @@ export default function Triage() {
     for (const key in historyValues) {
       if (Object.hasOwnProperty.call(historyValues, key)) {
         const value = historyValues[key];
-        obs.push({
-          concept: key,
-          value: typeof value !== "object" ? value : value.toISOString(),
-        });
+        try {
+          obs.push({
+            concept: key,
+            value: value,
+          });
+        }
+        catch (e) {
+          console.log(" Error :",e)
+        }
       }
     }
     return obs;
@@ -406,7 +411,12 @@ export default function Triage() {
 
   const handleHistoryChange = (event, hisConcept) => {
     const { name, value } = hisConcept;
-    setHistoryValues({ ...historyValues, [name]: value });
+    try {
+      setHistoryValues({ ...historyValues, [name]: value });
+    }
+    catch (e) {
+      console.log(" History set valuesss :",e, historyValues)
+    }
   };
 
   const deleteHistoryChange = (event,hisConcept) => {

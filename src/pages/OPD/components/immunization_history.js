@@ -38,6 +38,7 @@ export default function ImmunizationTable(props) {
   const rowpros = props.rows
   const patientData = props.patientData;
   const classes = useStyles();
+  var savedValues = props.savedValues;
 
   var storedata = [];
   let id = 0;
@@ -45,7 +46,7 @@ export default function ImmunizationTable(props) {
   var uuidval = "";
   var uuidDate = "";
   var uuidComment = "";
-  var date = new Date();
+  var date = "";
 
   Object.entries(rowpros.answers).map(([key, value]) => {
 
@@ -130,16 +131,16 @@ export default function ImmunizationTable(props) {
       params.value = [('0' + d.getDate()).slice(-2),
                     ('0' + (d.getMonth() + 1)).slice(-2),
                     d.getFullYear(),
-                  ].join('-');
+      ].join('/');
                       },
     renderCell: (params) => {
         return(
           <TextField
           label="Date"
-          type="date"
+            type="date"
+            id="date"
           margin="dense"
-          name="immuneDate"
-          id="immuneDate"
+          name="Date"
           InputLabelProps={{
           shrink: true,
             }}
@@ -164,8 +165,8 @@ export default function ImmunizationTable(props) {
           InputLabelProps={{
           shrink: true,
           }}
-          value = {params.value}
-          // onChange={(e) => handleCellClick(e, params)}
+          value = {savedValues[params.uuidComment]}
+          onChange={(e) => handleCellClick(e, params)}
           />
         )
       }
@@ -176,36 +177,16 @@ export default function ImmunizationTable(props) {
 
   const handleEditCellChangeCommitted = React.useCallback(
     ({ id, field, props }) => {
-      setSuccesscheck(false)
-      if (field == 'dateCreated') {
+      if (field == 'comments') {
         let datavalue = props.value;
-        const updatedRows = immuneData.map((row) => {
-          if (row.id == id) {
-            console.log(" row : ",row)
-            handleValue(row.uuidComment,datavalue)
-            row['dateCreated'] = datavalue
-          }
-          // updateImmunzationData(row)
-          return row;
+        immuneData.forEach(function (row, index) {
+        if (row.id === id) {
+          handleValue(row.uuidComment,datavalue)
+        }
         });
-        setImmuneData(updatedRows)
-      }
-      else if (field == 'comments') {
-        let datavalue = props.value;
-        const updatedRows = immuneData.map((row) => {
-
-          if (row.id === id) {
-            handleValue(row.uuidComment,datavalue)
-            row['comments'] = datavalue
-          }
-          // updateImmunzationData(row)
-          setSuccesscheck(true)
-          return row;
-        });
-        setImmuneData(updatedRows)
       }
     },
-    [immuneData],
+    [],
   );
 
   const handleValue = (uuidId, value) => {
@@ -216,14 +197,14 @@ export default function ImmunizationTable(props) {
     props.onChange(cVal,cVal)
 
   }
-  const handleCellClick = (event,param) => {
-
-    var cVal = {
+  const handleCellClick = (event, param) => {
+    console.log(" Comment Values :",param)
+    var dateVal = new Date(event.target.value);
+    var cDVal = {
       "name": param.row.uuidDate,
-      "value":event.target.value,
+      "value":dateVal,
     }
-    props.onChange(event,cVal)
-
+    props.onChange(event, cDVal);
   };
 
   return (

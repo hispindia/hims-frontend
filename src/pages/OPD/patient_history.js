@@ -15,6 +15,7 @@ import SurgicalHistory from './components/surgical_history'
 import PS_History from './components/ps_history'
 import FamilyHistory from './components/family_history'
 import AllergyHistory from './components/allergy_history'
+import Immunize from './components/immunization'
 
 
 
@@ -34,8 +35,6 @@ const { Panel } = Collapse;
 
 const ControlledAccordions = (props) => {
   const classes = useStyles();
-  var [immunization, setImmunization] = useState({});
-  var [value, setValue] = useState("");
   var IMMUNIZATION_HISTORY = "Immunization History"
   var MEDICATION_HISTORY = "Medication History"
   var SURGICAL_HISTORY = "Surgical History"
@@ -44,13 +43,6 @@ const ControlledAccordions = (props) => {
   var ALLERGY_HISTORY = "Allergies History"
   var patientData = props.rowdata;
   var savedValues = props.savedValues;
-
-  const onChange = (event, key) => {
-    setImmunization({
-      ...immunization,
-      [key]:event.target.value.display
-    })
-  };
 
   const handleChange = (event, cVal) => {
     props.onChange(event,cVal)
@@ -61,14 +53,13 @@ const ControlledAccordions = (props) => {
   };
 
   const itemImmuneList = (items) => {
-      // return items.answers.map((item1, index) => (
-       return( <ImmunizationTable
+       return( <Immunize
           rows={items}
          patientData={patientData}
-         onChange = {handleChange}
+         onChange={handleChange}
+         savedValues={savedValues}
     />
        )
-    // ))
   };
 
   const itemSurgicalList = (items) => {
